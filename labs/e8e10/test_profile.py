@@ -39,6 +39,7 @@ class ProfileTests(unittest.TestCase):
         (self.p/'Makefile').write_text((self.p/'Makefile').read_text().replace('-O0','-include unknown.h'))
         with self.assertRaisesRegex(ValueError,'UNSUPPORTED_FLAGS'):scan(self.p)
 
+
 class StudentE8A(unittest.TestCase):
     def test_declaration_change_reuses_actual_graph(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -56,6 +57,7 @@ class StudentE8A(unittest.TestCase):
                 {(x['type'],x['target'],x['dependency']) for x in result['findings']},
                 {('REDUNDANT','main.o','unused.h')})
 
+
 class StudentE9A(unittest.TestCase):
     def test_include_inside_header_invalidates(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -68,6 +70,7 @@ class StudentE9A(unittest.TestCase):
             self.assertEqual(result['actual']['main.o'],['config.h','extra.h','main.c'])
             self.assertIn(['MISSING','main.o','extra.h'],result['added'])
             self.assertEqual(set(result['refreshed']),{'main.o','helper.o'})
+
 
 class StudentE10A(unittest.TestCase):
     def test_transitive_include_matches_full_scan(self):
@@ -86,5 +89,6 @@ class StudentE10A(unittest.TestCase):
             self.assertEqual(incremental['actual']['main.o'],['config.h','extra.h','leaf.h','main.c'])
             missing={x['dependency'] for x in incremental['findings'] if x['type']=='MISSING'}
             self.assertEqual(missing,{'config.h','extra.h','leaf.h'})
+
 
 if __name__=='__main__':unittest.main()
