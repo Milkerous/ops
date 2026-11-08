@@ -10,4 +10,4 @@
 
 人工修改：在 `labs/e8e10/test_profile.py` 增加三个 `Student*` 测试类；填写 `docs/students/241880600/e8-e10` 下的个人报告、ADR 和本记录。报告中的 SHA、OUT、测试计数、性能中位数和 BuildChecker 状态均来自本次服务器运行。
 
-实际验证命令/输入/结果：依次运行 `python3 run_lab.py build`、`e8 --track A`、`e9 --track A`、`e10 --track A`；再用容器运行 `python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v`。结果：三个实验输出完成；E10 gate 为 30 行全通过；单元测试 `Ran 10 tests`、`OK`、退出码 0，日志为 `work/unit-tests-20261108-172909.log`。
+实际验证命令/输入/结果：依次运行 `python3 run_lab.py build`、`e8 --track A`、`e9 --track A`、`e10 --track A`；再用容器运行 `python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v`。结果：三个实验输出完成；E10 gate 为 30 行全通过；单元测试 `Ran 10 tests`、`OK`、退出码 0，日志为 `work/unit-tests-20261108-172909.log`。个人分支已推送到 GitHub，远端 SHA 为 `d5d99ec707cb84e71136fe7870dadd89025dd56e`；E8–E10 Actions 运行 https://github.com/Milkerous/ops/actions/runs/42467534092 成功。
