@@ -69,4 +69,22 @@ class StudentE9A(unittest.TestCase):
             self.assertIn(['MISSING','main.o','extra.h'],result['added'])
             self.assertEqual(set(result['refreshed']),{'main.o','helper.o'})
 
+class StudentE10A(unittest.TestCase):
+    def test_transitive_include_matches_full_scan(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p=Path(directory)/'sample'
+            fixture(p)
+            old=scan(p)
+            (p/'config.h').write_text('#include "extra.h"\n#define VALUE 1\n')
+            (p/'extra.h').write_text('#include "leaf.h"\n')
+            (p/'leaf.h').write_text('#define LEAF 7\n')
+            commit(p,'student: transitive include')
+            incremental=scan(p,old)
+            full=scan(p)
+            for key in ['actual','declared','findings']:
+                self.assertEqual(incremental[key],full[key])
+            self.assertEqual(incremental['actual']['main.o'],['config.h','extra.h','leaf.h','main.c'])
+            missing={x['dependency'] for x in incremental['findings'] if x['type']=='MISSING'}
+            self.assertEqual(missing,{'config.h','extra.h','leaf.h'})
+
 if __name__=='__main__':unittest.main()
