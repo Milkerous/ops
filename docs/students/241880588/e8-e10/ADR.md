@@ -16,4 +16,4 @@
 - E8：`work/e8-A-manual.golbo2`（baseline.json、buildchecker/、incremental.json、结论.txt）。
 - E9：`work/e9-A-manual.NLQtOw`（baseline.json、C1/C2/C3.json、C0/C1/C2-build.log）。
 - E10：`work/e10-A-manual.Z0vSKZ`（matrix/results.csv 30 行、performance-summary.csv、gate.json、final-buildchecker/）。
-- 单测：`work/unit-tests-20261108-171156.log`，8 项 OK。
+- 单测：`work/unit-tests-20261109-postmerge.log`，合并 main 后 11 项 OK（含组内其他成员的 3 项）。

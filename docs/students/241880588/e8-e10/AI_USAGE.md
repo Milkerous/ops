@@ -17,7 +17,7 @@
 - 本人核对每个 `STEP_EXIT_CODE`、`BASELINE_PASS`/`REUSE_PASS`/`C1_REUSE_PASS`/`C2_REFRESH_PASS`/`C3_RESOLVED_PASS`/`MATRIX_PASS`，确认 30 行 equal 全为 True 后才提交；报告中的 OUT、SHA、镜像 ID 均取自本人实际运行文件。
 
 实际验证命令/输入/结果：
-- `lab_ready`、`lab_new_run e8/e9/e10 A`、各步 `lab_python`；`docker run ... python3 -m unittest ...` 8 项 OK；E10 `gate.json` passed=true、rows=30；最终 BuildChecker status=SUCCEEDED。
+- `lab_ready`、`lab_new_run e8/e9/e10 A`、各步 `lab_python`；`docker run ... python3 -m unittest ...` 合并 main 后 11 项 OK（其中 3 项来自组内其他成员，本人新增 1 项）；E10 `gate.json` passed=true、rows=30；最终 BuildChecker status=SUCCEEDED。
 
 未调用模型时写明未调用；记录参考实现和自己的贡献边界：
 - 参考实现（fixture/scan/patch/buildchecker）来自课程实验包，本人未改写 `lab.py`；本人贡献为新增单测、实际运行证据、报告与 ADR。AI 用于命令执行与文档草稿，结论以本人复核的实际输出为准。
