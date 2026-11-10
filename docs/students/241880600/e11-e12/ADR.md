@@ -26,4 +26,4 @@ E12 需要依次连接 DRAFT、BuildChecker、EChecker 和 MDFixer，并保证�
 
 契约测试覆盖 schema、旧 commit、失败上游、错误 kind、相对 artifact URI、内容哈希、重复幂等、冲突请求、输出目录保护、候选镜像源和重启恢复。定向测试从 10 项增加到 12 项，结果全部通过。
 
-代价是候选 Dockerfile 依赖清华镜像的可达性，且当前 parser 仍只支持 `main.c`、`helper.c` 与显式 Make 规则。其他项目需要扩展目标映射；本组现有仓库不满足该结构，因此没有伪造独立真实项目的运行结果。
+CI 的构建基础镜像也改用可达的 `m.daocloud.io` 镜像地址，避免 Docker Hub 拉取波动影响集成工作流。代价是候选 Dockerfile 依赖清华镜像的可达性，且当前 parser 仍只支持 `main.c`、`helper.c` 与显式 Make 规则。其他项目需要扩展目标映射；本组现有仓库不满足该结构，因此没有伪造独立真实项目的运行结果。
