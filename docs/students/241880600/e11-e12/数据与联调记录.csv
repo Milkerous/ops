@@ -1,0 +1,6 @@
+实验,数据来源,仓库,base_commit,target_commit,job_id,trace_id,报告路径,补丁路径,结果
+E11-A,Course-generated integration sample,data/integration-sample/repo,12fb1fcee5eeaaad12dd9d0c2ddff3bcb9135126,f95ebc5615a3030394ded09b87d281e727466c22,job-63373b3ab240459f80d6d0ed1c0d5b4d,trace-e02bba8f56624ca0951897cbdee7ca04,work/e11-a-01/result.json,,SUCCEEDED
+E11-B,Course-generated integration sample,data/integration-sample/repo,12fb1fcee5eeaaad12dd9d0c2ddff3bcb9135126,f95ebc5615a3030394ded09b87d281e727466c22,job-0bcaf33acde74e038c95f5ea83974013,trace-206fec89407c4353bd0dc4a5ca538282,work/e11-b-02/result.json,work/e11-b-02/candidate.patch,SUCCEEDED
+E12 固定样例,Course-generated integration sample,data/integration-sample/repo,12fb1fcee5eeaaad12dd9d0c2ddff3bcb9135126,f95ebc5615a3030394ded09b87d281e727466c22,job-2d49b0f61307488591ab3fdb1f1964b1,trace-0333eaf7d284494d8a7a3bae24bf22d5,work/e12-01/result.json,work/e12-01/candidate.patch,SUCCEEDED
+E12 API,Course-generated integration sample,data/integration-sample/repo,12fb1fcee5eeaaad12dd9d0c2ddff3bcb9135126,f95ebc5615a3030394ded09b87d281e727466c22,job-cb18a8ddc7b342eb8482f6abd2717f9e,trace-e37f0d79f4be4bad9317d3912f7fde41,work/api-client/result.json,work/api-client/candidate.patch,SUCCEEDED
+E12 独立外部项目,Not available in group repository; current C/Make profile mismatch,,,,,,,Not run
