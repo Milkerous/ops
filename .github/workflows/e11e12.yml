@@ -13,7 +13,13 @@ jobs:
         run: |
           git config --local user.name 999999999
           git config --local user.email ci@example.invalid
-          docker build --build-arg BASE_IMAGE=m.daocloud.io/docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 -f labs/e11e12/environment/services/buildchecker/Dockerfile -t course-e11e12:999999999 labs/e11e12/environment
+          for attempt in 1 2 3; do
+            docker build --build-arg BASE_IMAGE=m.daocloud.io/docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 \
+              -f labs/e11e12/environment/services/buildchecker/Dockerfile \
+              -t course-e11e12:999999999 labs/e11e12/environment && break
+            if [ "$attempt" -eq 3 ]; then exit 1; fi
+            sleep 10
+          done
       - name: Contracts and integration
         run: |
           python3 run_e11e12.py test
