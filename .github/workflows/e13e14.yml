@@ -39,11 +39,15 @@ jobs:
           set -euo pipefail
           git config --local user.name 999999999
           git config --local user.email ci@example.invalid
-          docker build --progress=plain \
-            --build-arg BASE_IMAGE=m.daocloud.io/docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 \
-            --build-arg DOCKER_CLI_IMAGE=docker:28.5.1-cli@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad \
-            -f labs/e11e12/environment/services/buildchecker/Dockerfile \
-            -t course-e11e12:999999999 labs/e11e12/environment
+          for attempt in 1 2 3; do
+            docker build --progress=plain \
+              --build-arg BASE_IMAGE=m.daocloud.io/docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 \
+              --build-arg DOCKER_CLI_IMAGE=docker:28.5.1-cli@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad \
+              -f labs/e11e12/environment/services/buildchecker/Dockerfile \
+              -t course-e11e12:999999999 labs/e11e12/environment && break
+            if [ "$attempt" -eq 3 ]; then exit 1; fi
+            sleep 10
+          done
           python3 run_e11e12.py prepare
       - name: Start four services and run E2E fixture
         run: |
