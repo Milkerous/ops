@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 import traceback
@@ -15,6 +16,7 @@ from buildchecker.fullcheck import full_check
 
 ROOT = Path('/course').resolve()
 ROLE = os.environ['E14_ROLE']
+subprocess.run(['git', 'config', '--system', '--add', 'safe.directory', '*'], check=True)
 
 
 def local(value, area='work'):
