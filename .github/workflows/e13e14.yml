@@ -70,20 +70,20 @@ jobs:
           if ! python3 labs/e13e14/orchestrate.py --request data/integration-sample/e12.json --out work/ci-e14; then
             E14_ROOT="$PWD" E14_IMAGE=course-e11e12:999999999 docker compose -f labs/e13e14/compose.yaml -p e14-ci logs --no-color > work/ci-e14-runtime-failure.txt
             python3 - <<'PY' > work/ci-e14-error-summary.txt
-import json
-from pathlib import Path
-root = Path("work/ci-e14")
-result = root / "result.json"
-if result.exists():
-    print(json.dumps(json.loads(result.read_text()).get("error"), ensure_ascii=False))
-else:
-    print("result.json missing")
-for name in ("draft-response.json", "baseline-response.json", "target-response.json",
-             "incremental-response.json", "repair-response.json"):
-    path = root / name
-    if path.exists():
-        print(name, path.read_text(encoding="utf-8")[:1200])
-PY
+          import json
+          from pathlib import Path
+          root = Path("work/ci-e14")
+          result = root / "result.json"
+          if result.exists():
+              print(json.dumps(json.loads(result.read_text()).get("error"), ensure_ascii=False))
+          else:
+              print("result.json missing")
+          for name in ("draft-response.json", "baseline-response.json", "target-response.json",
+                       "incremental-response.json", "repair-response.json"):
+              path = root / name
+              if path.exists():
+                  print(name, path.read_text(encoding="utf-8")[:1200])
+          PY
             message=$(cat work/ci-e14-error-summary.txt | tr '\n' ' ' | sed 's/%/%25/g' | cut -c1-3500)
             echo "::error::E14 orchestration error: ${message}"
             message=$(tail -n 20 work/ci-e14-runtime-failure.txt | tr '\n' ' ' | sed 's/%/%25/g' | cut -c1-3500)
