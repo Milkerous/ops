@@ -11,3 +11,6 @@ __pycache__/
 .pytest_cache/
 
 data/
+
+# E13 local project package
+/e13-upstream-student.zip
