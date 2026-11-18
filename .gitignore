@@ -10,4 +10,5 @@ work/
 __pycache__/
 .pytest_cache/
 
+# E11-E12 generated local data
 data/
