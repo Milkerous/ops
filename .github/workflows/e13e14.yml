@@ -45,6 +45,10 @@ jobs:
             -f labs/e11e12/environment/services/buildchecker/Dockerfile \
             -t course-e11e12:999999999 labs/e11e12/environment
           python3 run_e11e12.py prepare
+      - name: Clear Docker Build Cache
+        run: docker builder prune -af
+      - name: Prepare test data
+        run: python3 run_e11e12.py prepare
       - name: Start four services and run E2E fixture
         run: |
           set -euo pipefail
