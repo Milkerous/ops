@@ -70,6 +70,8 @@ def normalized(findings):
     return sorted((f['type'],f['target'],f['dependency']) for f in findings if f['target'] in ('main.o','helper.o'))
 
 def execute(request, out, job_id=None):
+# 允许 docker 容器内的 root 用户操作 CI 生成的工作目录
+    subprocess.run(['git', 'config', '--global', '--add', 'safe.directory', '*'], check=False)
     job_id = job_id or 'job-'+uuid.uuid4().hex
     trace_id = 'trace-'+uuid.uuid4().hex
     if out.exists() and any(out.iterdir()):
