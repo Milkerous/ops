@@ -59,6 +59,29 @@ class Contracts(unittest.TestCase):
             candidate,
         )
         self.assertNotIn('RUN apt-get update &&',candidate)
+    def test_submit_rejects_unknown_mode(self):
+        with tempfile.TemporaryDirectory() as d:
+            store=server.Store(Path(d)/'jobs')
+            with self.assertRaisesRegex(ValueError,'Unknown mode'):
+                store.submit({'mode':'e99','repo':str(pipeline.ROOT/'data/x'),'base':'a','target':'b'},'mode-key')
+            store.pool.shutdown()
+
+    def test_submit_rejects_missing_target(self):
+        with tempfile.TemporaryDirectory() as d:
+            store=server.Store(Path(d)/'jobs')
+            with self.assertRaisesRegex(ValueError,'repo/base/target'):
+                store.submit({'mode':'e11-a','repo':str(pipeline.ROOT/'data/x'),'base':'a'},'missing-key')
+            store.pool.shutdown()
+
+    def test_submit_rejects_bad_idempotency_key(self):
+        with tempfile.TemporaryDirectory() as d:
+            store=server.Store(Path(d)/'jobs')
+            request={'mode':'e11-a','repo':str(pipeline.ROOT/'data/x'),'base':'a','target':'b'}
+            for key in ('', 'k'*129):
+                with self.assertRaisesRegex(ValueError,'idempotency_key'):
+                    store.submit(request,key)
+            store.pool.shutdown()
+
     def test_restart_marks_unfinished_job_failed(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d); job=root/'job-restart';job.mkdir()
