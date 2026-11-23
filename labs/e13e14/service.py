@@ -12,6 +12,7 @@ sys.path[:0] = ['/course/labs/e8e10', '/course/labs/e11e12/vendor', '/app']
 from lab import scan, patch, validate
 from draft.autobuild import auto_build
 from buildchecker.fullcheck import full_check
+subprocess.run(['git', 'config', '--global', '--add', 'safe.directory', '*'], check=False)
 
 ROOT = Path('/course').resolve()
 ROLE = os.environ['E14_ROLE']
