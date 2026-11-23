@@ -7,6 +7,6 @@ RUN sed -i \
       /etc/apt/sources.list.d/debian.sources \
  && apt-get update \
  && apt-get install -y --no-install-recommends build-essential \
- && rm -rf /var/lib/apt/lists/* \
- && make app
+ && rm -rf /var/lib/apt/lists/*
+RUN make app
 CMD ["./app"]

@@ -15,6 +15,7 @@ make clean && make app
 gcc -O0 -MM -MT main.o main.c   # C1 下应出现 hint.h
 ```
 
-## 候选镜像
+## 镜像
 
-`candidate.Dockerfile` 安装 build-essential 后执行 `make app`，容器运行 `./app` 输出 `1`。
+- `Dockerfile.broken`：只执行 `make app`，用于复现初始构建失败。
+- `candidate.Dockerfile`：安装 build-essential 后 `make app`，容器运行 `./app` 输出 `1`。

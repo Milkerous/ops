@@ -1,0 +1,81 @@
+{
+  "schema_version": "e11e12-1",
+  "kind": "fixed-md",
+  "status": "SUCCEEDED",
+  "commit": "3f226a7e0803398fe551d49ef3b406e35eb0ae9b",
+  "data": {
+    "schema_version": "e8e10-1",
+    "profile": "GCC_LOCAL_HEADERS_EXPLICIT_MAKE",
+    "commit": "3f226a7e0803398fe551d49ef3b406e35eb0ae9b",
+    "key": {
+      "directives": {
+        "config.h": [
+          "#define VALUE 1"
+        ],
+        "helper.c": [],
+        "hint.h": [
+          "#define HINT_NOTE \"a02 dependency exercise\""
+        ],
+        "main.c": [
+          "#include <stdio.h>",
+          "#include \"config.h\"",
+          "#include \"hint.h\""
+        ]
+      },
+      "recipes": [
+        "\tgcc main.o helper.o -o app",
+        "\tgcc $(CFLAGS) -c main.c -o main.o",
+        "\tgcc $(CFLAGS) -c helper.c -o helper.o",
+        "\trm -f main.o helper.o app"
+      ],
+      "flags": "-O0",
+      "compiler": "gcc (Debian 14.2.0-19) 14.2.0"
+    },
+    "actual": {
+      "main.o": [
+        "config.h",
+        "hint.h",
+        "main.c"
+      ],
+      "helper.o": [
+        "helper.c"
+      ]
+    },
+    "declared": {
+      "main.o": [
+        "config.h",
+        "main.c"
+      ],
+      "helper.o": [
+        "helper.c"
+      ]
+    },
+    "findings": [
+      {
+        "type": "MISSING",
+        "target": "main.o",
+        "dependency": "hint.h"
+      }
+    ],
+    "added": [
+      [
+        "MISSING",
+        "main.o",
+        "hint.h"
+      ]
+    ],
+    "resolved": [],
+    "refreshed": [
+      "main.o",
+      "helper.o"
+    ],
+    "reused": [],
+    "elapsed_s": 0.01065746694803238
+  },
+  "source_report": {
+    "job_id": "job-c4fd5c931bd840dd9a93ebf963c847ed",
+    "trace_id": "trace-1ab718ffcc154383a49b487c66adb81e",
+    "uri": "artifact://job-c4fd5c931bd840dd9a93ebf963c847ed/incremental-check.json",
+    "sha256": "cf70bddfc540ef413501f0687d6034aab86fe99e5ef11859fbb2596e6c8d0af9"
+  }
+}
