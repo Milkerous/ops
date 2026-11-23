@@ -1,0 +1,11 @@
+{
+  "mode": "e11-b",
+  "repo": "/course/data/a02-e13-project",
+  "base": "f384d66a8fd4b05a0c2429908aeac4af54e38047",
+  "target": "3f226a7e0803398fe551d49ef3b406e35eb0ae9b",
+  "candidate": "/course/data/a02-e13-project/candidate.Dockerfile",
+  "expected_output": "1",
+  "build_timeout": 1800,
+  "fixed_report": "/course/data/e13-handoff-a02/fixed-md.json",
+  "fixed_report_sha256": "fbf8c6be2c55eef536bfc3241e366112b1ca9d24c53e4582148c64cce3aa0a54"
+}
