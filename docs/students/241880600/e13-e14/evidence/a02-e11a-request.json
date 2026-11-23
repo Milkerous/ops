@@ -1,0 +1,9 @@
+{
+  "mode": "e11-a",
+  "repo": "/course/data/e13-a02-real-project",
+  "base": "2cad1b38da7d34e2019d8a6ef67576a791362ba0",
+  "target": "6648127721cb08dbeb3e52a7e217fd0563569880",
+  "candidate": "/course/data/e13-a02-candidate-aliyun.Dockerfile",
+  "expected_output": "1",
+  "build_timeout": 600
+}

@@ -9,3 +9,9 @@
 work/
 __pycache__/
 .pytest_cache/
+
+# E11-E12 generated local data
+data/
+
+# E13 local project package
+/e13-upstream-student.zip
