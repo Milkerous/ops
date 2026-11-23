@@ -128,7 +128,9 @@ def execute(request, out):
 
         repair = call('mdfixer', payload(target, out / 'repair-work',
                                         report=increment['report'], report_sha256=increment['sha256'],
-                                        target_commit=target_sha), out / 'repair-response.json')
+                                        target_commit=target_sha,
+                                        validation_macro=request.get('validation_macro', 'VALUE')),
+                    out / 'repair-response.json')
         stage('repair', target_sha, repair)
 
         final = call('buildchecker', payload(target, out / 'final-full'), out / 'recheck-response.json')

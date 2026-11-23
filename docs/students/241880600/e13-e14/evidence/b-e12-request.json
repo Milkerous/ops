@@ -1,0 +1,10 @@
+{
+  "mode": "e12",
+  "repo": "/course/data/e13-b-number-guess-c",
+  "base": "98ae733f2b37d7797110634928bd2ab321a5638f",
+  "target": "4749405d88a5791b246ba6b0c0a7bbc7827dbd14",
+  "candidate": "/course/data/e13-b-number-guess-candidate.Dockerfile",
+  "expected_output": "1",
+  "build_timeout": 600,
+  "validation_macro": "TARGET"
+}

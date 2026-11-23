@@ -97,7 +97,12 @@ def run(data):
         candidate = out / 'candidate.patch'
         candidate.write_text(diff, encoding='utf-8')
         save(out / 'repair-plan.json', edits)
-        verdict = validate(project, candidate, out / 'validation')
+        verdict = validate(
+            project,
+            candidate,
+            out / 'validation',
+            value_macro=data.get('validation_macro', 'VALUE'),
+        )
         if not verdict['accepted']:
             raise ValueError('Patch rejected: ' + str(verdict))
         return {'status': 'SUCCEEDED', 'patch': str(candidate),

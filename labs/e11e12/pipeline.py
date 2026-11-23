@@ -143,7 +143,12 @@ def execute(request, out, job_id=None):
             patchfile=out/'candidate.patch';patchfile.write_text(diff,encoding='utf-8')
             save(out/'repair-plan.json',edits)
             stage('repair',target_sha,{'edits':edits,'input_report':artifact(out/(md_envelope['kind']+'.json'),out,job_id)},[patchfile,out/'repair-plan.json'])
-            verdict=validate(target,patchfile,out/'validation')
+            verdict=validate(
+                target,
+                patchfile,
+                out/'validation',
+                value_macro=request.get('validation_macro','VALUE'),
+            )
             if not verdict['accepted']:
                 raise Failure('REPAIR_REJECTED',str(verdict))
             final=full(target,out/'final-full')
