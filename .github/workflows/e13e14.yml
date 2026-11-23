@@ -49,6 +49,8 @@ jobs:
             sleep 10
           done
           python3 run_e11e12.py prepare
+      - name: Clear Docker Build Cache
+        run: docker builder prune -af
       - name: Start four services and run E2E fixture
         run: |
           set -euo pipefail
