@@ -25,10 +25,7 @@ services:
   buildchecker:
     <<: *common
     environment:
-      - GIT_CONFIG_COUNT=1
-      - GIT_CONFIG_KEY_0=safe.directory
-      - GIT_CONFIG_VALUE_0=*
-     E14_ROLE: buildchecker
+      E14_ROLE: buildchecker
       PYTHONDONTWRITEBYTECODE: "1"
     command: ["python3", "labs/e13e14/service.py"]
     ports: ["127.0.0.1:18081:8080"]
@@ -37,9 +34,6 @@ services:
   echecker:
     <<: *common
     environment:
-      - GIT_CONFIG_COUNT=1
-      - GIT_CONFIG_KEY_0=safe.directory
-      - GIT_CONFIG_VALUE_0=*
       E14_ROLE: echecker
       PYTHONDONTWRITEBYTECODE: "1"
     command: ["python3", "labs/e13e14/service.py"]
@@ -48,9 +42,6 @@ services:
   draft:
     <<: *common
     environment:
-      - GIT_CONFIG_COUNT=1
-      - GIT_CONFIG_KEY_0=safe.directory
-      - GIT_CONFIG_VALUE_0=*
       E14_ROLE: draft
       PYTHONDONTWRITEBYTECODE: "1"
     command: ["python3", "labs/e13e14/service.py"]
@@ -62,9 +53,6 @@ services:
   mdfixer:
     <<: *common
     environment:
-      - GIT_CONFIG_COUNT=1
-      - GIT_CONFIG_KEY_0=safe.directory
-      - GIT_CONFIG_VALUE_0=*
       E14_ROLE: mdfixer
       PYTHONDONTWRITEBYTECODE: "1"
     command: ["python3", "labs/e13e14/service.py"]
