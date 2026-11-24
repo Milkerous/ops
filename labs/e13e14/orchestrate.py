@@ -132,10 +132,14 @@ def execute(request, out):
         stage('repair', target_sha, repair)
 
         final = call('buildchecker', payload(target, out / 'final-full'), out / 'recheck-response.json')
-        missing = [x for x in final['result']['findings'] if x['type'] == 'MISSING']
-        if missing:
-            raise ValueError(f'Recheck has {len(missing)} missing dependencies')
-        stage('recheck', target_sha, {'result': final, 'remaining_missing': 0})
+        remaining_findings = final['result']['findings']
+        if remaining_findings:
+            counts = {}
+            for finding in remaining_findings:
+                kind = finding.get('type', 'UNKNOWN')
+                counts[kind] = counts.get(kind, 0) + 1
+            raise ValueError(f'Recheck has unresolved findings: {counts}')
+        stage('recheck', target_sha, {'result': final, 'remaining_findings': 0})
         result['status'] = 'SUCCEEDED'
     except Exception as exc:
         result.update(status='FAILED', error=str(exc))

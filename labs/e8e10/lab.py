@@ -74,25 +74,70 @@ def scan(p, old=None):
             'elapsed_s':time.perf_counter()-start}
 
 def patch(p,report):
-    if report['commit']!=run(['git','rev-parse','HEAD'],p).strip(): raise ValueError('STALE_REPORT')
-    original=(p/'Makefile').read_text(); changed=original; edits=[]
+    if report['commit']!=run(['git','rev-parse','HEAD'],p).strip():
+        raise ValueError('STALE_REPORT')
+
+    original=(p/'Makefile').read_text()
+    changed=original
+    edits=[]
+
+    # Add dependencies reported as MISSING.
     for f in report['findings']:
-        if f['type']!='MISSING': continue
+        if f['type']!='MISSING':
+            continue
         t,d=f['target'],f['dependency']
-        if not re.fullmatch(r'[\w./-]+',d) or '..' in Path(d).parts or Path(d).is_absolute(): raise ValueError('UNSAFE_PATH')
-        if not (p/d).is_file(): raise ValueError('MISSING_INPUT')
-        m=re.search(r'^'+re.escape(t)+r': (.*)$',changed,re.M)
-        if not m: raise ValueError('UNSUPPORTED_TARGET')
-        raw=m[1]; macros=re.findall(r'\$\((\w+)\)',raw)
+        if not re.fullmatch(r'[\w./-]+',d) or '..' in Path(d).parts or Path(d).is_absolute():
+            raise ValueError('UNSAFE_PATH')
+        if not (p/d).is_file():
+            raise ValueError('MISSING_INPUT')
+
+        m=re.search(r'^'+re.escape(t)+r': ([^\n]*)$',changed,re.M)
+        if not m:
+            raise ValueError('UNSUPPORTED_TARGET')
+
+        raw=m[1]
+        macros=re.findall(r'\$\((\w+)\)',raw)
         if raw.strip()==('$(%s)'%macros[0] if macros else ''):
-            name=macros[0]; vm=re.search(r'^'+name+r' = (.*)$',changed,re.M)
-            if not vm: raise ValueError('UNSUPPORTED_MACRO')
-            changed=changed[:vm.end()]+ ' '+d+changed[vm.end():]; style='macro'
+            name=macros[0]
+            vm=re.search(r'^'+name+r' = ([^\n]*)$',changed,re.M)
+            if not vm:
+                raise ValueError('UNSUPPORTED_MACRO')
+            changed=changed[:vm.end()]+' '+d+changed[vm.end():]
+            style='macro'
         else:
-            changed=changed[:m.end()]+' '+d+changed[m.end():]; style='mixed' if macros else 'direct'
-        edits.append({'target':t,'dependency':d,'style':style})
-    diff=''.join(difflib.unified_diff(original.splitlines(True),changed.splitlines(True),fromfile='a/Makefile',tofile='b/Makefile'))
+            changed=changed[:m.end()]+' '+d+changed[m.end():]
+            style='mixed' if macros else 'direct'
+
+        edits.append({'type':'ADD','target':t,'dependency':d,'style':style})
+
+    # Remove dependencies reported as REDUNDANT.
+    for f in report['findings']:
+        if f['type']!='REDUNDANT':
+            continue
+        t,d=f['target'],f['dependency']
+        m=re.search(r'^'+re.escape(t)+r': ([^\n]*)$',changed,re.M)
+        if not m:
+            raise ValueError('UNSUPPORTED_TARGET')
+
+        dependencies=m[1].split()
+        if '$' in m[1]:
+            raise ValueError('UNSUPPORTED_REDUNDANT_MACRO')
+        if d not in dependencies:
+            raise ValueError('REDUNDANT_DEPENDENCY_NOT_DECLARED')
+
+        dependencies.remove(d)
+        replacement=t+': '+' '.join(dependencies)
+        changed=changed[:m.start()]+replacement+changed[m.end():]
+        edits.append({'type':'REMOVE','target':t,'dependency':d,'style':'direct'})
+
+    diff=''.join(difflib.unified_diff(
+        original.splitlines(True),
+        changed.splitlines(True),
+        fromfile='a/Makefile',
+        tofile='b/Makefile'
+    ))
     return diff,edits
+
 
 def validate(p, patchfile, evidence, fail_test=False):
     evidence.mkdir(parents=True); before=(p/'Makefile').read_bytes()
@@ -112,7 +157,7 @@ def validate(p, patchfile, evidence, fail_test=False):
         (evidence/'incremental.log').write_text(run(['make','app'],sandbox))
         checks['header_change']=run(['./app'],sandbox).strip()=='2'
         recheck=scan(sandbox); save(evidence/'recheck.json',recheck)
-        checks['no_missing']=not any(f['type']=='MISSING' for f in recheck['findings'])
+        checks['no_findings']=len(recheck['findings'])==0
     except (ValueError,subprocess.TimeoutExpired) as ex: error=str(ex)
     accepted=bool(checks) and all(checks.values()) and error is None
     # Source remains untouched until all checks pass. Evidence sandbox is retained.
@@ -123,7 +168,10 @@ def validate(p, patchfile, evidence, fail_test=False):
 
 def buildchecker(p,out):
     import sys
-    sys.path.insert(0,'/app')
+    sys.path.insert(
+        0,
+        str(Path(__file__).resolve().parent / 'environment' / 'services' / 'buildchecker')
+    )
     from buildchecker.fullcheck import full_check
     full_check(p,out)
     report=json.loads((out/'findings.json').read_text())
