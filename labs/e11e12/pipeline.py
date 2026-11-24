@@ -139,7 +139,7 @@ def execute(request, out, job_id=None):
             check_envelope(md_envelope,target_sha)
             current=md_envelope['data']
             before=(target/'Makefile').read_bytes()
-            diff,edits=patch(target,current)
+            diff,edits=patch(target,current,remove_redundant=True)
             if not diff:
                 raise Failure('NO_MISSING_DEPENDENCY','No MD to repair')
             patchfile=out/'candidate.patch';patchfile.write_text(diff,encoding='utf-8')
