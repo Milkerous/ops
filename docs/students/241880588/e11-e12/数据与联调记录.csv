@@ -1,0 +1,5 @@
+实验,数据来源,仓库,base_commit,target_commit,job_id,trace_id,报告路径,补丁路径,结果
+E11-A,course-generated integration-sample,/course/data/integration-sample/repo,13bbb6a21771730b591df964cc379df951d38fe5,bb21b4224315bfa719a6718b7ded5f72d2a3228e,job-a566f90da01c4ede948a2b8ce73a2738,trace-a1d332a3e25e465caa931af92d3c4bf0,work/e11-a-01/incremental-report.json,,SUCCEEDED
+E11-B,course-generated integration-sample,/course/data/integration-sample/repo,13bbb6a21771730b591df964cc379df951d38fe5,bb21b4224315bfa719a6718b7ded5f72d2a3228e,job-87ecc47ade934fed936bbec75997a188,trace-559cdcb7f0ff4739b237b05f303fe729,work/e11-b-01/fixed-md.json,work/e11-b-01/candidate.patch,SUCCEEDED
+E12固定样例,course-generated integration-sample,/course/data/integration-sample/repo,13bbb6a21771730b591df964cc379df951d38fe5,bb21b4224315bfa719a6718b7ded5f72d2a3228e,job-6fbe23d561fc4da5a66494b33fc9c1f0,trace-cd34d333650b475baedf56bd5ad9947d,work/e12-01/result.json,work/e12-01/candidate.patch,SUCCEEDED
+E12真实项目,本组GitHub仓库（Python/Docker，不满足接口）,https://github.com/Milkerous/ops,abead72f5063a4589127f3de99ad0019453b70c4,905ba68eb9e87ec6b5676d698c657c4ff5a4124c,,,work/e12-real-01/result.json,,FAILED/UNSUPPORTED_PROJECT
