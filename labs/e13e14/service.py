@@ -95,7 +95,7 @@ def run(data):
                 data['job_id'], data['trace_id']):
             raise ValueError('Report identity mismatch')
         out.mkdir(parents=True)
-        diff, edits = patch(project, envelope['data'])
+        diff, edits = patch(project, envelope['data'], remove_redundant=True)
         if not diff:
             raise ValueError('No missing dependency to repair')
         candidate = out / 'candidate.patch'

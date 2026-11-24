@@ -73,7 +73,7 @@ def scan(p, old=None):
             'resolved':[list(x) for x in sorted(previous-current)],'refreshed':refreshed,'reused':reused,
             'elapsed_s':time.perf_counter()-start}
 
-def patch(p,report):
+def patch(p,report,remove_redundant=False):
     if report['commit']!=run(['git','rev-parse','HEAD'],p).strip():
         raise ValueError('STALE_REPORT')
 
@@ -110,25 +110,27 @@ def patch(p,report):
 
         edits.append({'type':'ADD','target':t,'dependency':d,'style':style})
 
-    # Remove dependencies reported as REDUNDANT.
-    for f in report['findings']:
-        if f['type']!='REDUNDANT':
-            continue
-        t,d=f['target'],f['dependency']
-        m=re.search(r'^'+re.escape(t)+r': ([^\n]*)$',changed,re.M)
-        if not m:
-            raise ValueError('UNSUPPORTED_TARGET')
+    # Remove REDUNDANT only when explicitly requested.
+    if remove_redundant:
+        # Remove dependencies reported as REDUNDANT.
+        for f in report['findings']:
+            if f['type']!='REDUNDANT':
+                continue
+            t,d=f['target'],f['dependency']
+            m=re.search(r'^'+re.escape(t)+r': ([^\n]*)$',changed,re.M)
+            if not m:
+                raise ValueError('UNSUPPORTED_TARGET')
 
-        dependencies=m[1].split()
-        if '$' in m[1]:
-            raise ValueError('UNSUPPORTED_REDUNDANT_MACRO')
-        if d not in dependencies:
-            raise ValueError('REDUNDANT_DEPENDENCY_NOT_DECLARED')
+            dependencies=m[1].split()
+            if '$' in m[1]:
+                raise ValueError('UNSUPPORTED_REDUNDANT_MACRO')
+            if d not in dependencies:
+                raise ValueError('REDUNDANT_DEPENDENCY_NOT_DECLARED')
 
-        dependencies.remove(d)
-        replacement=t+': '+' '.join(dependencies)
-        changed=changed[:m.start()]+replacement+changed[m.end():]
-        edits.append({'type':'REMOVE','target':t,'dependency':d,'style':'direct'})
+            dependencies.remove(d)
+            replacement=t+': '+' '.join(dependencies)
+            changed=changed[:m.start()]+replacement+changed[m.end():]
+            edits.append({'type':'REMOVE','target':t,'dependency':d,'style':'direct'})
 
     diff=''.join(difflib.unified_diff(
         original.splitlines(True),
@@ -234,7 +236,7 @@ def demo(stage,out,track):
             save(out/(case+'.json'),inc); previous=inc
         buildchecker(p,out/'final-buildchecker')
     else:
-        diff,_=patch(p,baseline); candidate=out/'candidate.patch';candidate.write_text(diff)
+        diff,_=patch(p,baseline,remove_redundant=True); candidate=out/'candidate.patch';candidate.write_text(diff)
         rejected=validate(p,candidate,out/'reject-test',True);assert rejected['rollback']
         rows.append({'case':'test-rejection','passed':rejected['rollback']})
         accepted=validate(p,candidate,out/'accept');assert accepted['accepted']
